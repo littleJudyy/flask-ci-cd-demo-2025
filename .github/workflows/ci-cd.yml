@@ -1,11 +1,10 @@
-```yaml
 name: Flask CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 env:
   PYTHON_VERSION: '3.9'
@@ -194,7 +193,7 @@ jobs:
       - name: Secret Scanning with TruffleHog
         uses: trufflesecurity/trufflehog@main
         with:
-          path: ./
+          path: ./ 
           base: ${{ github.event.repository.default_branch }}
           head: HEAD
           extra_args: --only-verified
@@ -238,7 +237,6 @@ jobs:
           REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           IMAGE_NAME="ghcr.io/${REPO_LOWER}"
           
-          # Generate tags
           TAGS="${IMAGE_NAME}:sha-${{ github.sha }}"
           
           if [ "${{ github.event_name }}" == "pull_request" ]; then
@@ -330,4 +328,3 @@ jobs:
           echo "✓ Security: ${{ needs.security-additional.result }}"
           echo "✓ Build: ${{ needs.build.result }}"
           echo "=========================="
-
